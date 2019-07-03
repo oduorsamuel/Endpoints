@@ -2,6 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const bodyparser = require('body-parser')
 const mongoose = require('mongoose')
+const Courses = require('./models/Courses')
+const Course = require('./models/Courses')
 
 const app = express();
 const router = express.Router();

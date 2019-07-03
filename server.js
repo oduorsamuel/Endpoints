@@ -38,5 +38,17 @@ router.route('/courses/:id').get((req, res) => {
     });
 });
 
+router.route('/courses/add').post((req, res) => {
+    let Courses = new Course(req.body);
+    Courses.save()
+        .then(Courses => {
+            res.status(200).json({ 'course': 'added succesfully' });
+            
+        })
+        .catch(err => {
+            res.status(400).send('Failed to create new record');
+        });
+});
+
 app.use('/', router);
 app.listen(4000, () => console.log('Server running on port 4000'));

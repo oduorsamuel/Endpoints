@@ -17,5 +17,17 @@ connection.once('open', () => {
     console.log('connected to MongoDB');
 });
 
+//APIs
+router.route('/courses').get((req, res) => {
+    Courses.find((err, courses) => {
+        if (err)
+            console.log(err)
+        else
+            res.json(courses);
+
+
+    })
+});
+
 app.use('/', router);
 app.listen(4000, () => console.log('Server running on port 4000'));

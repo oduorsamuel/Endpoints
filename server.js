@@ -29,5 +29,14 @@ router.route('/courses').get((req, res) => {
     })
 });
 
+router.route('/courses/:id').get((req, res) => {
+    Courses.findById(req.params.id, (err, courses) => {
+        if (err)
+            console.log(err)
+        else
+            res.json(courses)
+    });
+});
+
 app.use('/', router);
 app.listen(4000, () => console.log('Server running on port 4000'));

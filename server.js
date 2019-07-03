@@ -11,7 +11,7 @@ const router = express.Router();
 app.use(cors());
 app.use(bodyparser.json());
 
-mongoose.connect('mongodb://localhost:27017/courses',{ useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/courses', { useNewUrlParser: true });
 const connection = mongoose.connection;
 connection.once('open', () => {
     console.log('connected to MongoDB');
@@ -43,7 +43,7 @@ router.route('/courses/add').post((req, res) => {
     Courses.save()
         .then(Courses => {
             res.status(200).json({ 'course': 'added succesfully' });
-            
+
         })
         .catch(err => {
             res.status(400).send('Failed to create new record');
@@ -69,6 +69,16 @@ router.route('/courses/update/:id').post((req, res) => {
         }
     });
 });
+
+router.route('/Courses/delete/:id').get((req, res) => {
+    Courses.findByIdAndRemove({ _id: req.params.id }, (err, Courses) => {
+        if (err)
+            res.json(err)
+        else
+            res.json('Course removed successfully')
+
+    })
+})
 
 app.use('/', router);
 app.listen(4000, () => console.log('Server running on port 4000'));

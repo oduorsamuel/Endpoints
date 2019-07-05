@@ -3,22 +3,28 @@ const Schema= mongoose.Schema;
 
 let Course=new Schema({
  courseName:{
-     type:String,   
+     type:String,
+     required:true   
  },
  shortName:{
      type:String,  
+     required:true
  },
  description:{
      type:String,
+     required:true
  },
  note:{
      type:String,
+     required:true
  },
  questionIntro:{
      type:String,
+     required:true
  },
  validPeriod:{
-    type:Number, 
+    type:Number,
+    required:true 
 },
 })
 module.exports=Courses=mongoose.model('Courses',Course);

@@ -12,20 +12,41 @@ router.use(bodyparser.json());
 router.get('/',(req, res) => {
     Courses.find((err, courses) => {
         if (err)
-            console.log(err)
+        res.json({
+                            
+            status:'bad request',
+            code:"400.4.1",
+            message:'bad request', 
+            error:err  
+        
+            });
         else
-            res.json(courses);
+        res.json({
+                            
+            status:'ok',
+            code:"200.4.1",
+            message:'courses were fetched successfully',
+            data:courses  
+        
+            });
 
 
     })
 });
 
 router.get('/:id',(req, res) => {
-    Courses.findById(req.params.id, (err, courses) => {
+    Courses.findById(req.params.id, (err, course) => {
         if (err)
             console.log(err)
         else
-            res.json(courses)
+        res.json({
+                            
+            status:'ok',
+            code:"200.4.1",
+            message:'course fetched successfully',
+            data:course
+        
+            });
     });
 });
 
@@ -45,8 +66,9 @@ router.post('/',(req, res) => {
                     .then(course => {
                         res.json({
                             
-                            status:'200.1.3',
-                            message:'Registred successfully', 
+                            status:'created',
+                            code:'201.4.3',
+                            message:'course created', 
                             data:course  
                         
                             });
@@ -78,9 +100,23 @@ router.post('/:id',(req, res) => {
             Courses.questionIntro = req.body.questionIntro;
             Courses.validPeriod = req.body.validPeriod;
             Courses.save().then(Courses => {
-                res.json('course updated successfully');
+                res.json({
+                            
+                    status:'ok',
+                    code:'200.4.4',
+                    message:'course update success', 
+                    data:Courses  
+                
+                    });
             }).catch(err => {
-                res.status(400).send('course update failed');
+                res.json({
+                            
+                    status:'bad request',
+                    code:'400.4.4',
+                    message:'bad request update failed', 
+                    error:err  
+                
+                    });
             });
         }
     });
@@ -91,7 +127,14 @@ router.delete('/:id',(req, res) => {
         if (err)
             res.json(err)
         else
-            res.json('Course removed successfully')
+        res.json({
+                            
+            status:'ok',
+            code:'200.4.5',
+            message:'course delete success', 
+            data:err
+        
+            });
 
     })
 })

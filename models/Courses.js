@@ -26,5 +26,6 @@ let Course=new Schema({
     type:Number,
     required:true 
 },
-})
+},
+{ versionKey: false })
 module.exports=Courses=mongoose.model('Courses',Course);

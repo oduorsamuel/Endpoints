@@ -43,7 +43,13 @@ router.post('/',(req, res) => {
             if (!course) {
                 Courses.create(userData)
                     .then(course => {
-                        res.json({ status: course.courseName + '  Registered successfully' });
+                        res.json({
+                            
+                            status:'200.1.3',
+                            message:'Registred successfully', 
+                            data:course  
+                        
+                            });
                         
                     })
                     .catch(err => {

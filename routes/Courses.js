@@ -2,7 +2,30 @@ const express = require('express')
 const cors = require('cors')
 const router=express.Router();
 const multer= require ('multer');
-const upload=multer({dest:'uploads/'})
+const storage=multer.diskStorage({
+    destination:function(req, file , cb){
+      cb(null, './uploads/')
+    },
+    filename:function(req, file, cb){
+        cb(null, new Date().toDateString() + file.originalname)   
+    },
+});
+// const fileFilter=function(req,file,cb){
+//     if(file.mimetype==="image.jpeg"||file.mimetype==="image.png"){
+//        cb(null, true)
+       
+//     }
+//     else{
+//         cb(null, false)
+//     }
+// }
+const upload=multer(
+    {storage:storage,
+    limits:{
+    fileSize:1024*1024*10
+    },
+    // fileFilter:fileFilter
+})
 const bodyparser = require('body-parser')
 const Courses = require('../models/Courses')
 
@@ -61,6 +84,7 @@ router.post('/', upload.single('coursefile'),(req, res) => {
         note: req.body.note,
         questionIntro: req.body.questionIntro,
         validPeriod: req.body.validPeriod,
+        coursefile:req.file.path
     }
     Courses.findOne({ courseName: req.body.courseName })
         .then(course => {

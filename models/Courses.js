@@ -26,6 +26,10 @@ let Course=new Schema({
     type:Number,
     required:true 
 },
+coursefile:{
+    type:String,
+    required:true 
+},
 },
 { versionKey: false })
 module.exports=Courses=mongoose.model('Courses',Course);

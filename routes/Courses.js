@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const router=express.Router();
+const multer= require ('multer');
+const upload=multer({dest:'uploads/'})
 const bodyparser = require('body-parser')
 const Courses = require('../models/Courses')
 
@@ -50,7 +52,8 @@ router.get('/:id',(req, res) => {
     });
 });
 
-router.post('/',(req, res) => {
+router.post('/', upload.single('coursefile'),(req, res) => {
+    console.log(req.file)
     const userData = {
         courseName: req.body.courseName,
         shortName: req.body.shortName,

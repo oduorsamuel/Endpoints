@@ -144,4 +144,51 @@ router.delete('/',(req, res)=>{
         })
     })
 })
+router.patch('/:id', (req, res) => {
+    Lessons.findById(req.params.id, (err, Lesson) => {
+        if (!Lesson)
+        res.json({
+            status:"not found",
+            code:"404.4.18",
+            message:"lessons not found",
+        })
+        else {
+            Lesson.lessonName = req.body.lessonName;
+            Lesson.startDate = req.body.startDate;
+            Lesson.signUpStartDate = req.body.signUpStartDate;
+            Lesson.signUpEndDate= req.body.signUpEndDate;
+            Lesson.endDate = req.body.endDate;
+            Lesson.passWithin = req.body.passWithin;
+            Lesson.course=req.body.courseId,
+            Lesson.teacher=req.body.teacher
+            Lesson.save()
+               .then(lesson => {
+                res.json({
+
+                    status: 'ok',
+                    code: '200.4.19',
+                    message: 'lesson update success',
+                    data: lesson,
+                    url: [{
+                        type: 'GET',
+                        url: 'localhost:4000/v1/lessons/' + lesson._id,
+                    },{
+                        type: 'DELETE',
+                        url: 'localhost:4000/v1/lessons/' + lesson._id
+                    }]
+
+                });
+            }).catch(err => {
+                res.json({
+
+                    status: 'bad request',
+                    code: '400.4.20',
+                    message: 'bad request update failed',
+                    error: err
+
+                });
+            });
+        }
+    });
+});
 module.exports = router

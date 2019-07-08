@@ -10,7 +10,18 @@ exports.get_all_lessons = (req, res, next) => {
                 status: "Ok",
                 code: "200.4.10",
                 message: "lessons fetched successfully",
-                data: lesson
+                data: lesson.map(lesson => {
+                    return {
+                        Data: lesson,
+                        url: [{
+                            type: 'GET',
+                            url: 'localhost:4000/v1/lessons/' + lesson._id
+                        }, {
+                            type: 'DELETE',
+                            url: 'localhost:4000/v1/lessons/' + lesson._id
+                        }]
+                    }
+                })
             })
         })
         .catch(err => {
@@ -28,7 +39,7 @@ exports.post_lesson = (req, res) => {
             if (!courses) {
                 res.json({
                     status: "Not found",
-                    code: "404.4.7",
+                    code: "404.4.12",
                     message: "course not found"
                 })
             }
@@ -47,7 +58,7 @@ exports.post_lesson = (req, res) => {
                     .then(result => {
                         res.json({
                             status: "created",
-                            code: "201.4.8",
+                            code: "201.4.12",
                             url: [{
                                 type: 'GET',
                                 url: 'localhost:4000/v1/lessons/' + result._id,
@@ -61,7 +72,7 @@ exports.post_lesson = (req, res) => {
                     .catch(err => {
                         res.json({
                             status: "ok",
-                            code: "400.4.9",
+                            code: "400.4.13",
                             message: "bad request",
                             error: err
                         })
@@ -77,15 +88,19 @@ exports.get_by_id = (req, res, next) => {
         .then(lesson => {
             res.json({
                 status: "ok",
-                code: "200.4.12",
+                code: "200.4.14",
                 message: "lesson fetched",
-                data: lesson
+                data: lesson,
+                url: {
+                    Type: "DELETE",
+                    url: 'localhost:4000/v1/lessons/' + lesson._id,
+                }
             })
         })
         .catch(err => {
             res.json({
                 status: "bad request",
-                code: "400.4.13",
+                code: "400.4.15",
                 message: "lesson not fetched",
                 data: err
             })
@@ -99,14 +114,28 @@ exports.delete_by_id = (req, res) => {
         .then(lesson => {
             res.json({
                 status: "ok",
-                code: "200.4.14",
-                message: "lesson deleted successfully"
+                code: "200.4.16",
+                message: "lesson deleted successfully",
+                url: {
+                    type: 'POST',
+                    url: 'localhost:4000/v1/lessons',
+                    body: {
+                        lessonName: "String",
+                        startDate: "Date",
+                        signUpStartDate: "Date",
+                        signUpEndDate: "Date",
+                        endDate: "Date",
+                        courseId: "String",
+                        passWithin: Number,
+                        teacher: "String"
+                    }
+                }
             })
         })
         .catch(err => {
             res.json({
                 status: "bad request",
-                code: "400.4.15",
+                code: "400.4.17",
                 message: "lesson not deleted",
                 data: err
             })
@@ -119,15 +148,28 @@ exports.delete_all = (req, res) => {
         .then(lesson => {
             res.json({
                 status: "ok",
-                code: "200.4.16",
+                code: "200.4.18",
                 message: "all lessons removed",
-                data: lesson
+                url: {
+                    type: 'POST',
+                    url: 'localhost:4000/v1/lessons',
+                    body: {
+                        lessonName: "String",
+                        startDate: "Date",
+                        signUpStartDate: "Date",
+                        signUpEndDate: "Date",
+                        endDate: "Date",
+                        courseId: "String",
+                        passWithin: Number,
+                        teacher: "String"
+                    }
+                }
             })
         })
         .catch(err => {
             res.json({
                 status: "bad request",
-                code: "400.4.17",
+                code: "400.4.19",
                 message: "lessons not deleted",
                 data: err
             })
@@ -139,7 +181,7 @@ exports.update = (req, res) => {
         if (!Lesson)
             res.json({
                 status: "not found",
-                code: "404.4.18",
+                code: "404.4.20",
                 message: "lessons not found",
             })
         else {
@@ -156,7 +198,7 @@ exports.update = (req, res) => {
                     res.json({
 
                         status: 'ok',
-                        code: '200.4.19',
+                        code: '200.4.21',
                         message: 'lesson update success',
                         data: lesson,
                         url: [{
@@ -172,7 +214,7 @@ exports.update = (req, res) => {
                     res.json({
 
                         status: 'bad request',
-                        code: '400.4.20',
+                        code: '400.4.22',
                         message: 'bad request update failed',
                         error: err
 

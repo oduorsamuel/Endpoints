@@ -6,7 +6,7 @@ exports.get_all_course = (req, res) => {
             res.json({
 
                 status: 'bad request',
-                code: "400.4.1",
+                code: "400.4.0",
                 message: 'bad request',
                 error: err
 
@@ -54,7 +54,7 @@ exports.post_course = (req, res) => {
                         res.json({
 
                             status: 'created',
-                            code: '201.4.3',
+                            code: '201.4.2',
                             message: 'course created',
                             data: course,
                             url: [{
@@ -68,7 +68,11 @@ exports.post_course = (req, res) => {
 
                     })
                     .catch(err => {
-                        res.send('error' + err)
+                        res.send({
+                            status:"bad request",
+                            code:"400.4.3",
+                            message:"failed to create course"
+                        })
                     })
 
             } else {
@@ -85,15 +89,15 @@ exports.get_by_id = (req, res) => {
         if (err)
             res.json({
                 status: 'bad request',
-                code: "400.4.0",
-                message: 'failled',
+                code: "400.4.4",
+                message: 'failled get specific course',
                 data: err,
             })
         else
             res.json({
 
                 status: 'ok',
-                code: "200.4.1",
+                code: "200.4.5",
                 message: 'course fetched successfully',
                 data: course,
                 url: {
@@ -113,7 +117,7 @@ exports.delete_by_id = (req, res) => {
             res.json({
 
                 status: 'ok',
-                code: '200.4.5',
+                code: '200.4.6',
                 message: 'course delete success',
                 data: err,
                 url: {
@@ -142,7 +146,7 @@ exports.delete_all = (req, res) => {
             res.json({
 
                 status: 'ok',
-                code: '200.4.6',
+                code: '200.4.7',
                 message: 'deleted all courses',
                 data: result,
                 url: {
@@ -187,7 +191,7 @@ exports.update = (req, res) => {
                 res.json({
 
                     status: 'ok',
-                    code: '200.4.4',
+                    code: '200.4.8',
                     message: 'course update success',
                     data: Courses,
                     url: [{
@@ -203,7 +207,7 @@ exports.update = (req, res) => {
                 res.json({
 
                     status: 'bad request',
-                    code: '400.4.4',
+                    code: '400.4.9',
                     message: 'bad request update failed',
                     error: err
 

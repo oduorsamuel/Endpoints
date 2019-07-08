@@ -12,8 +12,12 @@ connection.once('open', () => {
 app.use(morgan('dev'));
 
 //routes to handle requests
-var route= require('./routes/Courses');
-app.use('/v1/courses', route );
+var course= require('./routes/Courses');
+var lesson= require('./routes/Courses');
+app.use('/v1/courses', course );
+app.use('/v1/lessons', lesson );
+
+
 
 //morgan error handling
 var erroMessages= require('./routes/error');

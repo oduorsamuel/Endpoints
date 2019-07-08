@@ -93,91 +93,91 @@ exports.get_by_id = (req, res, next) => {
 
 }
 
-exports.delete_by_id=(req, res)=>{
+exports.delete_by_id = (req, res) => {
     Lessons.findByIdAndRemove(req.params.id)
-    .exec()
-    .then(lesson=>{
-        res.json({
-            status:"ok",
-            code:"200.4.14",
-            message:"lesson deleted successfully"  
+        .exec()
+        .then(lesson => {
+            res.json({
+                status: "ok",
+                code: "200.4.14",
+                message: "lesson deleted successfully"
+            })
         })
-    })
-    .catch(err=>{
-        res.json({
-            status:"bad request",
-            code:"400.4.15",
-            message:"lesson not deleted",
-            data:err 
+        .catch(err => {
+            res.json({
+                status: "bad request",
+                code: "400.4.15",
+                message: "lesson not deleted",
+                data: err
+            })
         })
-    })
 }
 
-exports.delete_all=(req, res)=>{
+exports.delete_all = (req, res) => {
     Lessons.remove()
-    .exec()
-    .then(lesson=>{
-        res.json({
-            status:"ok",
-            code:"200.4.16",
-            message:"all lessons removed",
-            data:lesson   
+        .exec()
+        .then(lesson => {
+            res.json({
+                status: "ok",
+                code: "200.4.16",
+                message: "all lessons removed",
+                data: lesson
+            })
         })
-    })
-    .catch(err=>{
-        res.json({
-            status:"bad request",
-            code:"400.4.17",
-            message:"lessons not deleted",
-            data:err 
+        .catch(err => {
+            res.json({
+                status: "bad request",
+                code: "400.4.17",
+                message: "lessons not deleted",
+                data: err
+            })
         })
-    })
 }
 
-exports.update= (req, res) => {
+exports.update = (req, res) => {
     Lessons.findById(req.params.id, (err, Lesson) => {
         if (!Lesson)
-        res.json({
-            status:"not found",
-            code:"404.4.18",
-            message:"lessons not found",
-        })
+            res.json({
+                status: "not found",
+                code: "404.4.18",
+                message: "lessons not found",
+            })
         else {
             Lesson.lessonName = req.body.lessonName;
             Lesson.startDate = req.body.startDate;
             Lesson.signUpStartDate = req.body.signUpStartDate;
-            Lesson.signUpEndDate= req.body.signUpEndDate;
+            Lesson.signUpEndDate = req.body.signUpEndDate;
             Lesson.endDate = req.body.endDate;
             Lesson.passWithin = req.body.passWithin;
-            Lesson.course=req.body.courseId,
-            Lesson.teacher=req.body.teacher
+            Lesson.course = req.body.courseId,
+                Lesson.teacher = req.body.teacher
             Lesson.save()
-               .then(lesson => {
-                res.json({
+                .then(lesson => {
+                    res.json({
 
-                    status: 'ok',
-                    code: '200.4.19',
-                    message: 'lesson update success',
-                    data: lesson,
-                    url: [{
-                        type: 'GET',
-                        url: 'localhost:4000/v1/lessons/' + lesson._id,
-                    },{
-                        type: 'DELETE',
-                        url: 'localhost:4000/v1/lessons/' + lesson._id
-                    }]
+                        status: 'ok',
+                        code: '200.4.19',
+                        message: 'lesson update success',
+                        data: lesson,
+                        url: [{
+                            type: 'GET',
+                            url: 'localhost:4000/v1/lessons/' + lesson._id,
+                        }, {
+                            type: 'DELETE',
+                            url: 'localhost:4000/v1/lessons/' + lesson._id
+                        }]
 
+                    });
+                }).catch(err => {
+                    res.json({
+
+                        status: 'bad request',
+                        code: '400.4.20',
+                        message: 'bad request update failed',
+                        error: err
+
+                    });
                 });
-            }).catch(err => {
-                res.json({
-
-                    status: 'bad request',
-                    code: '400.4.20',
-                    message: 'bad request update failed',
-                    error: err
-
-                });
-            });
         }
     });
 }

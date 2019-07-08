@@ -79,4 +79,27 @@ router.get('/',(req,res,next)=>{
         })
     })
 })
+
+router.get('/:id',(req, res, next)=>{
+    Lessons.findById(req.params.id)
+    .populate('course')
+    .exec()
+    .then(lesson=>{
+        res.json({
+           status:"ok",
+           code:"200.4.12",
+           message:"lesson fetched",
+           data:lesson 
+        })
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            code:"400.4.13",
+            message:"lesson not fetched",
+            data:err 
+         })
+    })
+
+})
 module.exports = router

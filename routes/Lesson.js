@@ -117,8 +117,29 @@ router.delete('/:id',(req, res)=>{
     .catch(err=>{
         res.json({
             status:"bad request",
-            code:"400.4.14",
+            code:"400.4.15",
             message:"lesson not deleted",
+            data:err 
+        })
+    })
+})
+
+router.delete('/',(req, res)=>{
+    Lessons.remove()
+    .exec()
+    .then(lesson=>{
+        res.json({
+            status:"ok",
+            code:"200.4.16",
+            message:"all lessons removed",
+            data:lesson   
+        })
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            code:"400.4.17",
+            message:"lessons not deleted",
             data:err 
         })
     })

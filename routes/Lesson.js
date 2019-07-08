@@ -102,4 +102,25 @@ router.get('/:id',(req, res, next)=>{
     })
 
 })
+
+router.delete('/:id',(req, res)=>{
+    Lessons.findByIdAndRemove(req.params.id)
+    .exec()
+    .then(lesson=>{
+        res.json({
+            status:"ok",
+            code:"200.4.14",
+            message:"lesson deleted successfully",
+            data:lesson   
+        })
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            code:"400.4.14",
+            message:"lesson not deleted",
+            data:err 
+        })
+    })
+})
 module.exports = router

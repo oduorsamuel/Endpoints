@@ -36,4 +36,4 @@ endDate:{
  }
 },
 { versionKey: false })
-module.exports=Courses=mongoose.model('Lessons',lesson);
+module.exports=Lessons=mongoose.model('Lessons',lesson);

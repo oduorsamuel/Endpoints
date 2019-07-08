@@ -57,4 +57,26 @@ router.post('/',(req, res) => {
         }
     })
 })
+
+router.get('/',(req,res,next)=>{
+    Lessons.find()
+    .populate('course')
+    .exec()
+    .then(lesson=>{
+        res.json({
+            status:"Ok",
+            code:"200.4.10",
+            message:"lessons fetched successfully",
+            data:lesson
+        })
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            code:"400.4.11",
+            message:"Server error",
+            error:err
+        })
+    })
+})
 module.exports = router

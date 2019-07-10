@@ -102,7 +102,7 @@ exports.delete_by_id =  (req, res) => {
             Lesson.numberOfQuestions = req.body.numberOfQuestions;
             Lesson.percentComplete = req.body.percentComplete;
             Lesson.note = req.body.note;
-            Lesson.deleted_by ="Dev";
+            Lesson.deleted_by ="Dev";//req,params.userId
             Lesson.course = req.body.courseId,
                 Lesson.deleted_at = Date.now()
             Lesson.save()
@@ -172,7 +172,7 @@ exports.update = (req, res) => {
             Lesson.numberOfQuestions = req.body.numberOfQuestions;
             Lesson.percentComplete = req.body.percentComplete;
             Lesson.note = req.body.note;
-            Lesson.updated_by ="Dev";
+            Lesson.updated_by ="Dev";//req,params.userid
             Lesson.course = req.body.courseId,
                 Lesson.updated_at = Date.now()
             Lesson.save()

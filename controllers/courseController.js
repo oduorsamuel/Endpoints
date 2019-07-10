@@ -98,7 +98,7 @@ exports.delete_by_id = (req, res) => {
             Courses.questionIntro = req.body.questionIntro;
             Courses.validPeriod = req.body.validPeriod;
             Courses.coursefile = req.file.path;
-            Courses.deleted_by = "Dev";
+            Courses.deleted_by = "Dev";//req,params.userid
             Courses.deleted_at = Date.now();
             Courses.save().then(Courses => {
                 res.json({
@@ -133,7 +133,7 @@ exports.update = (req, res) => {
             Courses.questionIntro = req.body.questionIntro;
             Courses.validPeriod = req.body.validPeriod;
             Courses.coursefile = req.file.path;
-            Courses.updated_by = "Dev";
+            Courses.updated_by = "Dev";//req,params.userid
             Courses.updated_at = Date.now();
             Courses.save().then(Courses => {
                 res.json({

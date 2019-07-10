@@ -6,33 +6,41 @@ let lesson=new Schema({
      type:String,
      required:true
  },
- startDate:{
-     type:Date,
-     default:Date.now()   
+ lessonNumber:{
+     type:Number,
+     required:true   
  },
- signUpStartDate:{
-    type:Date,
-    default:Date.now()   
+ numberOfQuestions:{
+    type:Number,
+    required:true 
 },
-signUpEndDate:{
-    type:Date,
-    default:Date.now()   
+percentComplete:{
+    type:String,
+    required:true 
 },
-endDate:{
-    type:Date,
-    default:Date.now()  
+note:{
+    type:String,
+    required:true 
 },
- passWithin:{
-     type:Number,  
-     required:true
- },
  course:{
      type:mongoose.Schema.Types.ObjectId, ref:'Courses',
      required:true
  },
- teacher:{
+ deleted_at:{
+    type:Date,  
+    default:null
+},
+deleted_by:{
+    type:String,  
+    default:null
+},
+updated_at:{
+    type:Date,  
+    default:null
+},
+ updated_by:{
      type:String,
-     required:true
+     default:null
  }
 },
 { versionKey: false })

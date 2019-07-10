@@ -30,6 +30,22 @@ coursefile:{
     type:String,
     required:true 
 },
+deleted_at:{
+    type:Date,  
+    default:null
+},
+deleted_by:{
+    type:String,  
+    default:null
+},
+updated_at:{
+    type:Date,  
+    default:null
+},
+ updated_by:{
+     type:String,
+     default:null
+ }
 },
 { versionKey: false })
 module.exports=Courses=mongoose.model('Courses',Course);

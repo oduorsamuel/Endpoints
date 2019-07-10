@@ -3,7 +3,7 @@ const Courses = require('../models/Courses');
 
 exports.get_all_lessons = (req, res, next) => {
     Lessons.find()
-        .populate('course')
+        .populate('course', 'courseName')
         .exec()
         .then(lesson => {
             res.json({
@@ -13,13 +13,6 @@ exports.get_all_lessons = (req, res, next) => {
                 data: lesson.map(lesson => {
                     return {
                         Data: lesson,
-                        url: [{
-                            type: 'GET',
-                            url: 'localhost:4000/v1/lessons/' + lesson._id
-                        }, {
-                            type: 'DELETE',
-                            url: 'localhost:4000/v1/lessons/' + lesson._id
-                        }]
                     }
                 })
             })
@@ -46,26 +39,17 @@ exports.post_lesson = (req, res) => {
             else {
                 const lessonData = new Lessons({
                     lessonName: req.body.lessonName,
-                    startDate: req.body.startDate,
-                    signUpStartDate: req.body.signUpStartDate,
-                    signUpEndDate: req.body.signUpEndDate,
-                    endDate: req.body.endDate,
-                    passWithin: req.body.passWithin,
+                    lessonNumber: req.body.lessonNumber,
+                    numberOfQuestions: req.body.numberOfQuestions,
+                    percentComplete: req.body.percentComplete,
+                    note: req.body.note,
                     course: req.body.courseId,
-                    teacher: req.body.teacher
                 });
                 lessonData.save()
                     .then(result => {
                         res.json({
                             status: "created",
                             code: "201.4.12",
-                            url: [{
-                                type: 'GET',
-                                url: 'localhost:4000/v1/lessons/' + result._id,
-                            }, {
-                                type: 'DELETE',
-                                url: 'localhost:4000/v1/lessons/' + result._id
-                            }],
                             data: result
                         })
                     })
@@ -91,10 +75,6 @@ exports.get_by_id = (req, res, next) => {
                 code: "200.4.14",
                 message: "lesson fetched",
                 data: lesson,
-                url: {
-                    Type: "DELETE",
-                    url: 'localhost:4000/v1/lessons/' + lesson._id,
-                }
             })
         })
         .catch(err => {
@@ -108,38 +88,44 @@ exports.get_by_id = (req, res, next) => {
 
 }
 
-exports.delete_by_id = (req, res) => {
-    Lessons.findByIdAndRemove(req.params.id)
-        .exec()
-        .then(lesson => {
+exports.delete_by_id =  (req, res) => {
+    Lessons.findById(req.params.id, (err, Lesson) => {
+        if (!Lesson)
             res.json({
-                status: "ok",
-                code: "200.4.16",
-                message: "lesson deleted successfully",
-                url: {
-                    type: 'POST',
-                    url: 'localhost:4000/v1/lessons',
-                    body: {
-                        lessonName: "String",
-                        startDate: "Date",
-                        signUpStartDate: "Date",
-                        signUpEndDate: "Date",
-                        endDate: "Date",
-                        courseId: "String",
-                        passWithin: Number,
-                        teacher: "String"
-                    }
-                }
+                status: "not found",
+                code: "404.4.20",
+                message: "lessons not found",
             })
-        })
-        .catch(err => {
-            res.json({
-                status: "bad request",
-                code: "400.4.17",
-                message: "lesson not deleted",
-                data: err
-            })
-        })
+        else {
+            Lesson.lessonName = req.body.lessonName;
+            Lesson.lessonNumber = req.body.lessonNumber;
+            Lesson.numberOfQuestions = req.body.numberOfQuestions;
+            Lesson.percentComplete = req.body.percentComplete;
+            Lesson.note = req.body.note;
+            Lesson.deleted_by ="Dev";
+            Lesson.course = req.body.courseId,
+                Lesson.deleted_at = Date.now()
+            Lesson.save()
+                .then(lesson => {
+                    res.json({
+
+                        status: 'ok',
+                        code: '200.4.16',
+                        message: 'lesson delete success',
+                        data: lesson,
+                    });
+                }).catch(err => {
+                    res.json({
+
+                        status: 'bad request',
+                        code: '400.4.17',
+                        message: 'bad request deletes failed',
+                        error: err
+
+                    });
+                });
+        }
+    });
 }
 
 exports.delete_all = (req, res) => {
@@ -152,16 +138,12 @@ exports.delete_all = (req, res) => {
                 message: "all lessons removed",
                 url: {
                     type: 'POST',
-                    url: 'localhost:4000/v1/lessons',
                     body: {
                         lessonName: "String",
-                        startDate: "Date",
-                        signUpStartDate: "Date",
-                        signUpEndDate: "Date",
-                        endDate: "Date",
-                        courseId: "String",
-                        passWithin: Number,
-                        teacher: "String"
+                        lessonNumber: "Number",
+                        numberOfQuestions: "Number",
+                        percentComplete: "String",
+                        note: "String"
                     }
                 }
             })
@@ -186,13 +168,13 @@ exports.update = (req, res) => {
             })
         else {
             Lesson.lessonName = req.body.lessonName;
-            Lesson.startDate = req.body.startDate;
-            Lesson.signUpStartDate = req.body.signUpStartDate;
-            Lesson.signUpEndDate = req.body.signUpEndDate;
-            Lesson.endDate = req.body.endDate;
-            Lesson.passWithin = req.body.passWithin;
+            Lesson.lessonNumber = req.body.lessonNumber;
+            Lesson.numberOfQuestions = req.body.numberOfQuestions;
+            Lesson.percentComplete = req.body.percentComplete;
+            Lesson.note = req.body.note;
+            Lesson.updated_by ="Dev";
             Lesson.course = req.body.courseId,
-                Lesson.teacher = req.body.teacher
+                Lesson.updated_at = Date.now()
             Lesson.save()
                 .then(lesson => {
                     res.json({
@@ -201,14 +183,6 @@ exports.update = (req, res) => {
                         code: '200.4.21',
                         message: 'lesson update success',
                         data: lesson,
-                        url: [{
-                            type: 'GET',
-                            url: 'localhost:4000/v1/lessons/' + lesson._id,
-                        }, {
-                            type: 'DELETE',
-                            url: 'localhost:4000/v1/lessons/' + lesson._id
-                        }]
-
                     });
                 }).catch(err => {
                     res.json({

@@ -14,8 +14,10 @@ app.use(morgan('dev'));
 //routes to handle requests
 var course= require('./routes/Courses');
 var lesson= require('./routes/Lesson');
+var lessonContent=require('./routes/LessonContent')
 app.use('/v1/courses', course );
 app.use('/v1/lessons', lesson );
+app.use('/v1/lessonsContent', lessonContent );
 
 
 

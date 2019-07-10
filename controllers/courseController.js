@@ -9,7 +9,6 @@ exports.get_all_course = (req, res) => {
                 code: "400.4.0",
                 message: 'bad request',
                 error: err
-
             });
         else
             res.json({
@@ -20,19 +19,9 @@ exports.get_all_course = (req, res) => {
                 data: courses.map(course => {
                     return {
                         Data: course,
-                        url: [{
-                            type: 'GET',
-                            url: 'localhost:4000/v1/courses/' + course._id
-                        }, {
-                            type: 'DELETE',
-                            url: 'localhost:4000/v1/courses/' + course._id
-                        }]
                     }
                 })
-
             });
-
-
     })
 }
 exports.post_course = (req, res) => {
@@ -57,21 +46,14 @@ exports.post_course = (req, res) => {
                             code: '201.4.2',
                             message: 'course created',
                             data: course,
-                            url: [{
-                                type: 'PATCH',
-                                url: 'localhost:4000/v1/courses/' + course._id,
-                            }, {
-                                type: 'DELETE',
-                                url: 'localhost:4000/v1/courses/' + course._id
-                            }]
                         });
 
                     })
                     .catch(err => {
                         res.send({
-                            status:"bad request",
-                            code:"400.4.3",
-                            message:"failed to create course"
+                            status: "bad request",
+                            code: "400.4.3",
+                            message: "failed to create course"
                         })
                     })
 
@@ -100,81 +82,45 @@ exports.get_by_id = (req, res) => {
                 code: "200.4.5",
                 message: 'course fetched successfully',
                 data: course,
-                url: {
-                    type: 'DELETE',
-                    url: 'localhost:4000/v1/courses/' + course._id
-                }
-
             });
     });
 }
 
 exports.delete_by_id = (req, res) => {
-    Courses.findByIdAndRemove({ _id: req.params.id }, (err, Courses) => {
-        if (err)
-            res.json(err)
-        else
-            res.json({
+    Courses.findById(req.params.id, (err, Courses) => {
+        if (!Courses)
+            return (err)
+        else {
+            Courses.courseName = req.body.courseName;
+            Courses.shortName = req.body.shortName;
+            Courses.description = req.body.description;
+            Courses.note = req.body.note;
+            Courses.questionIntro = req.body.questionIntro;
+            Courses.validPeriod = req.body.validPeriod;
+            Courses.coursefile = req.file.path;
+            Courses.deleted_by = "Dev";
+            Courses.deleted_at = Date.now();
+            Courses.save().then(Courses => {
+                res.json({
 
-                status: 'ok',
-                code: '200.4.6',
-                message: 'course delete success',
-                data: err,
-                url: {
-                    type: 'POST',
-                    url: 'localhost:4000/v1/courses',
-                    body: {
-                        courseName: "String",
-                        shortName: "String ",
-                        description: "String ",
-                        note: "String",
-                        questionIntro: "String ",
-                        validPeriod: Number,
-                        coursefile: "image"
-                    }
-                }
+                    status: 'ok',
+                    code: '200.4.5',
+                    message: 'course delete success',
+                    data: Courses,
+                });
+            }).catch(err => {
+                res.json({
 
-            });
-
-    })
-}
-
-exports.delete_all = (req, res) => {
-    Courses.remove()
-        .exec()
-        .then(result => {
-            res.json({
-
-                status: 'ok',
-                code: '200.4.7',
-                message: 'deleted all courses',
-                data: result,
-                url: {
-                    type: 'POST',
-                    url: 'localhost:4000/v1/courses',
-                    body: {
-                        courseName: "String",
-                        shortName: "String ",
-                        description: "String ",
-                        note: "String",
-                        questionIntro: "String ",
-                        validPeriod: Number,
-                        coursefile: "image"
-                    }
-                }
-
-            });
-        })
-        .catch(err => {
-            res.json(
-                {
+                    status: 'bad request',
+                    code: '400.4.6',
+                    message: 'bad request update failed',
                     error: err
-                }
-            )
-        })
 
+                });
+            });
+        }
+    });
 }
-
 exports.update = (req, res) => {
     Courses.findById(req.params.id, (err, Courses) => {
         if (!Courses)
@@ -186,7 +132,9 @@ exports.update = (req, res) => {
             Courses.note = req.body.note;
             Courses.questionIntro = req.body.questionIntro;
             Courses.validPeriod = req.body.validPeriod;
-            Courses.coursefile = req.body.path
+            Courses.coursefile = req.file.path;
+            Courses.updated_by = "Dev";
+            Courses.updated_at = Date.now();
             Courses.save().then(Courses => {
                 res.json({
 
@@ -194,14 +142,6 @@ exports.update = (req, res) => {
                     code: '200.4.8',
                     message: 'course update success',
                     data: Courses,
-                    url: [{
-                        type: 'GET',
-                        url: 'localhost:4000/v1/courses/' + courses._id,
-                    }, {
-                        type: 'DELETE',
-                        url: 'localhost:4000/v1/courses/' + courses._id
-                    }]
-
                 });
             }).catch(err => {
                 res.json({

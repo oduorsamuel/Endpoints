@@ -4,7 +4,7 @@ const bodyparser = require('body-parser')
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './uploads/')
+        cb(null, './lesson/')
     },
     filename: function (req, file, cb) {
         cb(null, new Date().toDateString() + file.originalname)
@@ -17,13 +17,9 @@ const upload = multer(
             fileSize: 1024 * 1024 * 10
         },
     })
-const courseController = require('../controllers/courseController')
+const lessonContentController = require('../controllers/lessonContentController')
 router.use(bodyparser.urlencoded({ extended: false }))
 router.use(bodyparser.json());
 
-router.get('/', courseController.get_all_course)
-router.get('/:id', courseController.get_by_id)
-router.post('/', upload.single('coursefile'), courseController.post_course)
-router.patch('/:id', upload.single('coursefile'), courseController.update)
-router.delete('/:id',upload.single('coursefile'),  courseController.delete_by_id)
+
 module.exports = router

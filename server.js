@@ -17,7 +17,7 @@ var lesson= require('./routes/Lesson');
 var lessonContent=require('./routes/LessonContent')
 app.use('/v1/courses', course );
 app.use('/v1/lessons', lesson );
-app.use('/v1/lessonsContent', lessonContent );
+app.use('/v1/lessoncontent', lessonContent );
 
 
 

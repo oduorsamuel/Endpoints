@@ -59,4 +59,4 @@ let lessonContentSchema = new Schema({
     }
 },
     { versionKey: false })
-module.exports = Lessons = mongoose.model('Lessons', lessonContentSchema);
+module.exports = Lessons = mongoose.model('LessonContent', lessonContentSchema);

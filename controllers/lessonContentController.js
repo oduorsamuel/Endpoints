@@ -1,4 +1,5 @@
 const lessonContent = require('../models/lessonContent');
+const lessons=require('../models/Lesson')
 
 exports.get_all_lessonContent = (req, res) => {
     lessonContent.find((err, lessonContent) => {
@@ -15,51 +16,63 @@ exports.get_all_lessonContent = (req, res) => {
 
                 status: 'ok',
                 code: "200.4.1",
-                message: 'lessonContent were fetched successfully',
+                message: 'lesson content were fetched successfully',
                 data: lessonContent
             });
     })
 }
-exports.post_course = (req, res) => {
-    console.log(req.file)
-    const userData = {
-        courseName: req.body.courseName,
-        shortName: req.body.shortName,
-        description: req.body.description,
-        note: req.body.note,
-        questionIntro: req.body.questionIntro,
-        validPeriod: req.body.validPeriod,
-        coursefile: req.file.path
-    }
-    lessonContent.findOne({ courseName: req.body.courseName })
-        .then(course => {
-            if (!course) {
-                lessonContent.create(userData)
-                    .then(course => {
-                        res.json({
-
-                            status: 'created',
-                            code: '201.4.2',
-                            message: 'course created',
-                            data: course,
-                        });
-
-                    })
-                    .catch(err => {
-                        res.send({
-                            status: "bad request",
-                            code: "400.4.3",
-                            message: "failed to create course"
-                        })
-                    })
-
-            } else {
-                res.json({ error: 'Course name already exist' })
+exports.post_lessonContent = (req, res) => {
+    lessons.findById(req.body.LessonId, (err, lessons)=>{
+        if(err){
+            res.json({
+                status:"not found",
+                code:"",
+                message:"lesson not found",
+            })
+        }
+        else{
+            const userData = {
+                Title: req.body.Title,
+                LessonId: req.body.LessonId,//to be replaced by req.params.lessonId
+                CourseId: lessons.course,
+                Type: req.body.Type,
+                POS: req.body.POS,
+                PartFile: req.file.path
             }
-        })
-        .catch(err => {
-            res.send('error:' + err)
-        })
+            lessonContent.findOne({ POS: req.body.POS })
+                .then(found => {
+                    if (!found) {
+                        lessonContent.create(userData)
+                            .then(content => {
+                                res.json({
+        
+                                    status: 'created',
+                                    code: '201.4.2',
+                                    message: 'course created',
+                                    data: content,
+                                });
+        
+                            })
+                            .catch(err => {
+                                res.send({
+                                    status: "bad request",
+                                    code: "400.4.3",
+                                    message: "failed to create content",
+                                    error:err
+                                })
+                            })
+        
+                    } else {
+                        res.json({ error: 'part number already exist' })
+                    }
+                })
+                .catch(err => {
+                    res.send('error:' + err)
+                })
+
+        }
+    })
+
 }
 
 exports.get_by_id = (req, res) => {

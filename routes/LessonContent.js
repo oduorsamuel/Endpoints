@@ -23,9 +23,9 @@ router.use(bodyparser.json());
 
 router.get('/', lessonContentController.get_all_lessonContent)
 router.get('/:id', lessonContentController.get_by_id)
-router.post('/', upload.single('coursefile'), lessonContentController.post_course)
-router.patch('/:id', upload.single('coursefile'), lessonContentController.update)
-router.delete('/:id',upload.single('coursefile'),  lessonContentController.delete_by_id);
+router.post('/', upload.single('PartFile'), lessonContentController.post_lessonContent)
+router.patch('/:id', upload.single('PartFile'), lessonContentController.update)
+router.delete('/:id',upload.single('PartFile'),  lessonContentController.delete_by_id);
 
 
 module.exports = router

@@ -157,3 +157,49 @@ exports.update=(req, res)=>{
         })
     })
 }
+
+exports.delete_by_id=(req, res)=>{
+    lessonPartContent.findById(req.params.id)
+    .then(content=>{
+        if(content<1){
+            res.json({
+                status:"ok",
+                message:"invalid id"
+            })
+        }
+        else{
+            content.LessonPartId= req.body.LessonPartId,
+            content.Type= req.body.Type,
+            content.CourseId= req.body.CourseId,
+            content.LessonId= req.body.LessonId,
+            content.POS= req.body.POS,
+            content.Content=req.body.Content,
+            content.File=req.file.mimetype,
+            content.orgfilename=req.file.originalname,
+            content.DeletedAt=Date.now(),
+            content.DeletedBY="Dev",
+            content.IsDeleted=1
+            content.save()
+            .then(updatedcontent=>{
+                res.json({
+                    status:"ok",
+                    message:"success",
+                    data:updatedcontent
+                })
+            })
+            .catch(err=>{
+                res.json({
+                    status:"bad request",
+                    code:"",
+                    error:err
+                })
+            })
+        }
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            error:err
+        })
+    })
+}

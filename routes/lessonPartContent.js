@@ -25,4 +25,5 @@ router.post('/', upload.single('File'), lesseonPartContentController.post_conten
 router.get('/',lesseonPartContentController.get_lesson_content_parts)
 router.get('/:id',lesseonPartContentController.get_by_id)
 router.patch('/:id',upload.single('File'),lesseonPartContentController.update)
+router.delete('/:id',upload.single('File'),lesseonPartContentController.delete_by_id)
 module.exports=router

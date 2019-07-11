@@ -111,85 +111,60 @@ exports.get_by_id = (req, res, next) => {
 
 }
 
-exports.delete_by_id =  (req, res) => {
-    Lessons.findById(req.params.id, (err, Lesson) => {
-        if (!Lesson)
+exports.delete_by_id=(req, res)=>{
+    Lessons.findById(req.params.id)
+    .then(Lesson=>{
+        if(Lesson<1){
             res.json({
-                status: "not found",
-                code: "404.4.20",
-                message: "lessons not found",
+                status:"ok",
+                message:"invalid id"
             })
-        else {
+        }
+        else{
             Lesson.lessonName = req.body.lessonName;
             Lesson.lessonNumber = req.body.lessonNumber;
             Lesson.numberOfQuestions = req.body.numberOfQuestions;
             Lesson.percentComplete = req.body.percentComplete;
             Lesson.note = req.body.note;
-            Lesson.deleted_by ="Dev";//req,params.userId
+            Lesson.DeletedBy ="Dev";//req,params.userid
             Lesson.course = req.body.courseId,
-            Lesson.deleted_at = Date.now()
+            Lesson.DeletedAt = Date.now(),
+            Lesson.IsDeleted=1
             Lesson.save()
-                .then(lesson => {
-                    res.json({
-
-                        status: 'ok',
-                        code: '200.4.16',
-                        message: 'lesson delete success',
-                        data: lesson,
-                    });
-                }).catch(err => {
-                    res.json({
-
-                        status: 'bad request',
-                        code: '400.4.17',
-                        message: 'bad request deletes failed',
-                        error: err
-
-                    });
-                });
+            .then(deletedcontent=>{
+                res.json({
+                    status:"ok",
+                    message:"success",
+                    data:deletedcontent
+                })
+            })
+            .catch(err=>{
+                res.json({
+                    status:"bad request",
+                    code:"",
+                    error:err
+                })
+            })
         }
-    });
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            error:err
+        })
+    })
 }
 
-exports.delete_all = (req, res) => {
-    Lessons.remove()
-        .exec()
-        .then(lesson => {
+exports.update=(req, res)=>{
+    Lessons.findById(req.params.id)
+    .then(Lesson=>{
+        if(Lesson<1){
             res.json({
-                status: "ok",
-                code: "200.4.18",
-                message: "all lessons removed",
-                url: {
-                    type: 'POST',
-                    body: {
-                        lessonName: "String",
-                        lessonNumber: "Number",
-                        numberOfQuestions: "Number",
-                        percentComplete: "String",
-                        note: "String"
-                    }
-                }
+                status:"ok",
+                message:"invalid id"
             })
-        })
-        .catch(err => {
-            res.json({
-                status: "bad request",
-                code: "400.4.19",
-                message: "lessons not deleted",
-                data: err
-            })
-        })
-}
-
-exports.update = (req, res) => {
-    Lessons.findById(req.params.id, (err, Lesson) => {
-        if (!Lesson)
-            res.json({
-                status: "not found",
-                code: "404.4.20",
-                message: "lessons not found",
-            })
-        else {
+        }
+        else{
             Lesson.lessonName = req.body.lessonName;
             Lesson.lessonNumber = req.body.lessonNumber;
             Lesson.numberOfQuestions = req.body.numberOfQuestions;
@@ -197,26 +172,28 @@ exports.update = (req, res) => {
             Lesson.note = req.body.note;
             Lesson.updated_by ="Dev";//req,params.userid
             Lesson.course = req.body.courseId,
-                Lesson.updated_at = Date.now()
+            Lesson.updated_at = Date.now()
             Lesson.save()
-                .then(lesson => {
-                    res.json({
-
-                        status: 'ok',
-                        code: '200.4.21',
-                        message: 'lesson update success',
-                        data: lesson,
-                    });
-                }).catch(err => {
-                    res.json({
-
-                        status: 'bad request',
-                        code: '400.4.22',
-                        message: 'bad request update failed',
-                        error: err
-
-                    });
-                });
+            .then(updatedcontent=>{
+                res.json({
+                    status:"ok",
+                    message:"success",
+                    data:updatedcontent
+                })
+            })
+            .catch(err=>{
+                res.json({
+                    status:"bad request",
+                    code:"",
+                    error:err
+                })
+            })
         }
-    });
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            error:err
+        })
+    })
 }

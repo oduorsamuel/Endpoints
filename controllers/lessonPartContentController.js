@@ -180,11 +180,11 @@ exports.delete_by_id=(req, res)=>{
             content.DeletedBY="Dev",
             content.IsDeleted=1
             content.save()
-            .then(updatedcontent=>{
+            .then(deletedcontent=>{
                 res.json({
                     status:"ok",
                     message:"success",
-                    data:updatedcontent
+                    data:deletedcontent
                 })
             })
             .catch(err=>{

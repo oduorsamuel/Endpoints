@@ -34,19 +34,19 @@ IsDeleted: {
     type: Number,
     default: 0
 },
-deleted_at:{
+DeletedAt:{
     type:Date,  
     default:null
 },
-deleted_by:{
+DeletedBy:{
     type:String,  
     default:null
 },
-updated_at:{
+UpdatedAt:{
     type:Date,  
     default:null
 },
- updated_by:{
+ UpdatedBy:{
      type:String,
      default:null
  }

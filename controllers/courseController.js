@@ -35,6 +35,7 @@ exports.post_course = (req, res) => {
         validPeriod: req.body.validPeriod,
         coursefile: req.file.path
     }
+    
     Courses.findOne({ courseName: req.body.courseName })
         .then(course => {
             if (!course) {
@@ -87,72 +88,89 @@ exports.get_by_id = (req, res) => {
 }
 
 exports.delete_by_id = (req, res) => {
-    Courses.findById(req.params.id, (err, Courses) => {
-        if (!Courses)
-            return (err)
-        else {
-            Courses.courseName = req.body.courseName;
-            Courses.shortName = req.body.shortName;
-            Courses.description = req.body.description;
-            Courses.note = req.body.note;
-            Courses.questionIntro = req.body.questionIntro;
-            Courses.validPeriod = req.body.validPeriod;
-            Courses.coursefile = req.file.path;
-            Courses.deleted_by = "Dev";//req,params.userid
-            Courses.deleted_at = Date.now();
-            Courses.IsDeleted=1;
-            Courses.save().then(Courses => {
+    Courses.findById(req.params.id)
+        .then(Courses => {
+            if (Courses < 1) {
                 res.json({
-
-                    status: 'ok',
-                    code: '200.4.5',
-                    message: 'course delete success',
-                    data: Courses,
-                });
-            }).catch(err => {
-                res.json({
-                    status: 'bad request',
-                    code: '400.4.6',
-                    message: 'bad request update failed',
-                    error: err
-
-                });
-            });
-        }
-    });
+                    status: "ok",
+                    message: "invalid id"
+                })
+            }
+            else {
+                Courses.courseName = req.body.courseName;
+                Courses.shortName = req.body.shortName;
+                Courses.description = req.body.description;
+                Courses.note = req.body.note;
+                Courses.questionIntro = req.body.questionIntro;
+                Courses.validPeriod = req.body.validPeriod;
+                Courses.coursefile = req.file.path;
+                Courses.DeleteddBy = "Dev";//req,params.userid
+                Courses.DeletedAt = Date.now();
+                Courses.IsDeleted = 1
+                Courses.save()
+                    .then(deletedcontent => {
+                        res.json({
+                            status: "ok",
+                            message: "success",
+                            data: deletedcontent
+                        })
+                    })
+                    .catch(err => {
+                        res.json({
+                            status: "bad request",
+                            code: "",
+                            error: err
+                        })
+                    })
+            }
+        })
+        .catch(err => {
+            res.json({
+                status: "bad request",
+                error: err
+            })
+        })
 }
 exports.update = (req, res) => {
-    Courses.findById(req.params.id, (err, Courses) => {
-        if (!Courses)
-            return (err)
-        else {
-            Courses.courseName = req.body.courseName;
-            Courses.shortName = req.body.shortName;
-            Courses.description = req.body.description;
-            Courses.note = req.body.note;
-            Courses.questionIntro = req.body.questionIntro;
-            Courses.validPeriod = req.body.validPeriod;
-            Courses.coursefile = req.file.path;
-            Courses.updated_by = "Dev";//req,params.userid
-            Courses.updated_at = Date.now();
-            Courses.save().then(Courses => {
+    Courses.findById(req.params.id)
+        .then(Courses => {
+            if (Courses < 1) {
                 res.json({
-
-                    status: 'ok',
-                    code: '200.4.8',
-                    message: 'course update success',
-                    data: Courses,
-                });
-            }).catch(err => {
-                res.json({
-
-                    status: 'bad request',
-                    code: '400.4.9',
-                    message: 'bad request update failed',
-                    error: err
-
-                });
-            });
-        }
-    });
+                    status: "ok",
+                    message: "invalid id"
+                })
+            }
+            else {
+                Courses.courseName = req.body.courseName;
+                Courses.shortName = req.body.shortName;
+                Courses.description = req.body.description;
+                Courses.note = req.body.note;
+                Courses.questionIntro = req.body.questionIntro;
+                Courses.validPeriod = req.body.validPeriod;
+                Courses.coursefile = req.file.path;
+                Courses.UpdatedBy = "Dev";//req,params.userid
+                Courses.UpdatedAt = Date.now();
+                Courses.save()
+                    .then(updatedcontent => {
+                        res.json({
+                            status: "ok",
+                            message: "success",
+                            data: updatedcontent
+                        })
+                    })
+                    .catch(err => {
+                        res.json({
+                            status: "bad request",
+                            code: "",
+                            error: err
+                        })
+                    })
+            }
+        })
+        .catch(err => {
+            res.json({
+                status: "bad request",
+                error: err
+            })
+        })
 }

@@ -30,11 +30,11 @@ note:{
     type: Number,
     default: 0
 },
- deleted_at:{
+ DeletedAt:{
     type:Date,  
     default:null
 },
-deleted_by:{
+DeletedBy:{
     type:String,  
     default:null
 },

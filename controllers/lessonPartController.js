@@ -107,39 +107,49 @@ exports.get_by_id = (req, res) => {
             })
         })
 }
-exports.delete_by_id = (req, res) => {
-    LessonPart.findById(req.params.id, (err, LessonPart) => {
-        if (!LessonPart)
-            return (err)
-        else {
-            LessonPart.Title = req.body.Title;
-            LessonPart.Type = req.body.Type;
-            LessonPart.POS = req.body.POS;
-            LessonPart.CourseId = req.body.CourseId;
-            LessonPart.LessonId = req.body.LessonId;
-            LessonPart.DeletedBy = "Dev";//req,params.userid
-            LessonPart.DeletedAt = Date.now();
-            LessonPart.IsDeleted = 1;
-            LessonPart.save().then(data => {
-                res.json({
-
-                    status: 'ok',
-                    code: '200.4.5',
-                    message: 'lesson part delete success',
-                    data: data,
-                });
-            }).catch(err => {
-                res.json({
-                    status: 'bad request',
-                    code: '400.4.6',
-                    message: 'bad request delete failed',
-                    error: err
-
-                });
-            });
+exports.delete_by_id=(req, res)=>{
+    LessonPart.findById(req.params.id)
+    .then(content=>{
+        if(content<1){
+            res.json({
+                status:"ok",
+                message:"invalid id"
+            })
         }
-    });
+        else{
+            content.Title = req.body.Title;
+            content.Type = req.body.Type;
+            content.POS = req.body.POS;
+            content.CourseId = req.body.CourseId;
+            content.LessonId = req.body.LessonId;
+            content.DeletedBy = "Dev";//req,params.userid
+            content.DeletedAt = Date.now();
+            content.IsDeleted=1
+            content.save()
+            .then(deletedcontent=>{
+                res.json({
+                    status:"ok",
+                    message:"success",
+                    data:deletedcontent
+                })
+            })
+            .catch(err=>{
+                res.json({
+                    status:"bad request",
+                    code:"",
+                    error:err
+                })
+            })
+        }
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            error:err
+        })
+    })
 }
+
 
 exports.update=(req, res)=>{
     LessonPart.findById(req.params.id)

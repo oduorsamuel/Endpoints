@@ -24,4 +24,5 @@ router.use(bodyparser.json());
 router.post('/', upload.single('File'), lesseonPartContentController.post_content)
 router.get('/',lesseonPartContentController.get_lesson_content_parts)
 router.get('/:id',lesseonPartContentController.get_by_id)
+router.patch('/:id',upload.single('File'),lesseonPartContentController.update)
 module.exports=router

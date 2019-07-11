@@ -107,7 +107,6 @@ exports.get_by_id = (req, res) => {
             })
         })
 }
-
 exports.delete_by_id = (req, res) => {
     LessonPart.findById(req.params.id, (err, LessonPart) => {
         if (!LessonPart)
@@ -142,35 +141,44 @@ exports.delete_by_id = (req, res) => {
     });
 }
 
-exports.update = (req, res) => {
-    LessonPart.findById(req.params.id, (err, LessonPart) => {
-        if (!LessonPart)
-            return (err)
-        else {
-            LessonPart.Title = req.body.Title;
-            LessonPart.Type = req.body.Type;
-            LessonPart.POS = req.body.POS;
-            LessonPart.CourseId = req.body.CourseId;
-            LessonPart.LessonId = req.body.LessonId;
-            LessonPart.UpdateddBy = "Dev";//req,params.userid
-            LessonPart.UpdatedAt = Date.now();
-            LessonPart.save().then(data => {
-                res.json({
-
-                    status: 'ok',
-                    code: '',
-                    message: 'lesson part update success',
-                    data: data,
-                });
-            }).catch(err => {
-                res.json({
-                    status: 'bad request',
-                    code: '',
-                    message: 'bad request update failed',
-                    error: err
-
-                });
-            });
+exports.update=(req, res)=>{
+    LessonPart.findById(req.params.id)
+    .then(content=>{
+        if(content<1){
+            res.json({
+                status:"ok",
+                message:"invalid id"
+            })
         }
-    });
+        else{
+            content.Title = req.body.Title;
+            content.Type = req.body.Type;
+            content.POS = req.body.POS;
+            content.CourseId = req.body.CourseId;
+            content.LessonId = req.body.LessonId;
+            content.UpdatedBy = "Dev";//req,params.userid
+            content.UpdatedAt = Date.now();
+            content.save()
+            .then(updatedcontent=>{
+                res.json({
+                    status:"ok",
+                    message:"success",
+                    data:updatedcontent
+                })
+            })
+            .catch(err=>{
+                res.json({
+                    status:"bad request",
+                    code:"",
+                    error:err
+                })
+            })
+        }
+    })
+    .catch(err=>{
+        res.json({
+            status:"bad request",
+            error:err
+        })
+    })
 }

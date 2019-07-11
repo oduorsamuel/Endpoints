@@ -30,6 +30,10 @@ coursefile:{
     type:String,
     required:true 
 },
+IsDeleted: {
+    type: Number,
+    default: 0
+},
 deleted_at:{
     type:Date,  
     default:null

@@ -127,7 +127,7 @@ exports.delete_by_id =  (req, res) => {
             Lesson.note = req.body.note;
             Lesson.deleted_by ="Dev";//req,params.userId
             Lesson.course = req.body.courseId,
-                Lesson.deleted_at = Date.now()
+            Lesson.deleted_at = Date.now()
             Lesson.save()
                 .then(lesson => {
                     res.json({

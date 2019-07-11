@@ -100,6 +100,7 @@ exports.delete_by_id = (req, res) => {
             Courses.coursefile = req.file.path;
             Courses.deleted_by = "Dev";//req,params.userid
             Courses.deleted_at = Date.now();
+            Courses.IsDeleted=1;
             Courses.save().then(Courses => {
                 res.json({
 
@@ -110,7 +111,6 @@ exports.delete_by_id = (req, res) => {
                 });
             }).catch(err => {
                 res.json({
-
                     status: 'bad request',
                     code: '400.4.6',
                     message: 'bad request update failed',

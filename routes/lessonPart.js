@@ -8,9 +8,9 @@ router.use(bodyparser.json());
 router.get('/', lessonPartController.get_all_LessonParts)
 router.get('/:id', lessonPartController.get_by_id)
 router.post('/', lessonPartController.post_LessonPart)
-// router.patch('/:id', upload.single('PartFile'), lessonPartController.update)
-// router.delete('/:id',upload.single('PartFile'),  lessonPartController.delete_by_id);
-// router.get('/intro',lessonPartController.get_intro)
+router.patch('/:id', lessonPartController.update)
+router.delete('/:id', lessonPartController.delete_by_id);
+
 
 
 module.exports = router

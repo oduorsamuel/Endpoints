@@ -26,6 +26,10 @@ note:{
      type:mongoose.Schema.Types.ObjectId, ref:'Courses',
      required:true
  },
+ IsDeleted: {
+    type: Number,
+    default: 0
+},
  deleted_at:{
     type:Date,  
     default:null

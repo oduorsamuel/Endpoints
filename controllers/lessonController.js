@@ -26,18 +26,23 @@ exports.get_all_lessons = (req, res, next) => {
             })
         })
 }
-exports.post_lesson = (req, res) => {
+exports.post_lesson=(req, res)=>{
     Courses.findById(req.body.courseId)
-        .then(courses => {
-            if (!courses) {
-                res.json({
-                    status: "Not found",
-                    code: "404.4.12",
-                    message: "course not found"
-                })
-            }
-            else {
-                const lessonData = new Lessons({
+    .exec()
+    .then(data=>{
+        if(data<1){
+            res.json({
+                status:"Not found",
+                message:"course not found",
+                data:data
+            })
+        }
+        else{
+            Lessons.find({"course":req.body.courseId,"lessonName":req.body.lessonName})
+            .exec()
+            .then(conflict=>{
+                if(conflict<1){
+                    const lessonData = new Lessons({
                     lessonName: req.body.lessonName,
                     lessonNumber: req.body.lessonNumber,
                     numberOfQuestions: req.body.numberOfQuestions,
@@ -46,25 +51,43 @@ exports.post_lesson = (req, res) => {
                     course: req.body.courseId,
                 });
                 lessonData.save()
-                    .then(result => {
-                        res.json({
-                            status: "created",
-                            code: "201.4.12",
-                            data: result
-                        })
+                .then(savedLessons=>{
+                    res.json({
+                        status:"ok",
+                        message:"lesson saved for the course",
+                        data:savedLessons
                     })
-                    .catch(err => {
-                        res.json({
-                            status: "ok",
-                            code: "400.4.13",
-                            message: "bad request",
-                            error: err
-                        })
+                })
+                .catch(err=>{
+                    res.json({
+                        status:"bad request",
+                        message:"unable to save the lesson",
+                        error:err
                     })
-            }
+                })
+                }
+                else{
+                    res.json({
+                        status:"conflict",
+                        message:"similar lesson already exist"
+                    })
+                }
+            })
+            .catch(err=>{
+                res.json({
+                    message:"validation error",
+                    error:err
+                })
+            })
+        }
+    })
+    .catch(err=>{
+        res.json({
+            message:"error when trying to get a lesson",
+            error:err
         })
+    })
 }
-
 exports.get_by_id = (req, res, next) => {
     Lessons.findById(req.params.id)
         .populate('course')

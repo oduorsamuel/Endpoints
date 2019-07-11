@@ -56,4 +56,4 @@ let lessonPartSchema = new Schema({
     }
 },
     { versionKey: false })
-module.exports = Lessons = mongoose.model('LessonPart', lessonPartSchema);
+module.exports = LessonPart = mongoose.model('LessonPart', lessonPartSchema);

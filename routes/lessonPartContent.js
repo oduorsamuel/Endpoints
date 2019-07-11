@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
         cb(null, './uploads/lessonContent')
     },
     filename: function (req, file, cb) {
-        cb(null, new Date().toDateString() + file.originalname)
+        cb(null, file.originalname)
     },
 });
 const upload = multer(
@@ -21,4 +21,7 @@ const lesseonPartContentController = require('../controllers/lessonPartContentCo
 router.use(bodyparser.urlencoded({ extended: false }))
 router.use(bodyparser.json());
 
+router.post('/', upload.single('File'), lesseonPartContentController.post_content)
+router.get('/',lesseonPartContentController.get_lesson_content_parts)
+router.get('/:id',lesseonPartContentController.get_by_id)
 module.exports=router

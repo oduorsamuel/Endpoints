@@ -22,7 +22,7 @@ exports.get_all_LessonParts = (req, res) => {
     })
 }
 exports.post_LessonPart = (req, res) => {
-    lessons.findById(req.body.LessonId)
+    lessons.findById(req.body.LessonId)//can be replaced by req.params
         .exec().
         then(lesson => {
             if (!lesson) {
